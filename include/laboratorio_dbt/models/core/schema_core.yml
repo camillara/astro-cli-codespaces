@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  # === Dimensões ===
+  - name: dim_usina
+    columns:
+      - name: id_dim_usina
+        tests: [not_null, unique]
+
+  - name: dim_localidade
+    columns:
+      - name: id_dim_localidade
+        tests: [not_null, unique]
+
+  - name: dim_tempo
+    columns:
+      - name: id_dim_tempo
+        tests: [not_null, unique]
+
+  # === Fato ===
+  - name: fact_disponibilidade
+    tests:
+      # o grão do fato deve ser único
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [id_dim_usina, id_dim_localidade, id_dim_tempo]
+
+    columns:
+      - name: id_dim_usina
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_usina')
+              field: id_dim_usina
+
+      - name: id_dim_localidade
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_localidade')
+              field: id_dim_localidade
+
+      - name: id_dim_tempo
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_tempo')
+              field: id_dim_tempo

@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: staging
+    database: LAB_PIPELINE
+    schema: STAGING
+    tables:
+      - name: disponibilidade_usina_2025_07
+      - name: disponibilidade_usina_2025_08
+      - name: disponibilidade_usina_2025_09
+
+models:
+  - name: stg_usina_disp
+    description: "Transforma disponibilidade de usina"
+    columns:
+      - name: id_subsistema
+        tests: [not_null]
+      - name: instante
+        tests: [not_null]
